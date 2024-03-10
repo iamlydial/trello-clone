@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      // Specifies the module system to be used; "commonjs" is a module system for JavaScript used in Node.js.
+      "module": "commonjs",
+  
+      // Sets the ECMAScript target version to ES6 (ECMAScript 2015) for compatibility and language features.
+      "target": "ES6",
+  
+      // Specifies the strategy to resolve module names during compilation; "Node" uses Node.js module resolution algorithm.
+      "moduleResolution": "Node",
+  
+      // Generates source map files (.map) to facilitate debugging by mapping compiled code back to the original source code.
+      "sourceMap": true,
+  
+      // Specifies the output directory for the compiled code.
+      "outDir": "dist",
+  
+      // Enables interoperability with CommonJS modules and ES6 modules using a simpler import syntax.
+      "esModuleInterop": true,
+  
+      // Enables strict type-checking options for improved code quality and reliability.
+      "strict": true
+    }
+  }
+  
