@@ -2,7 +2,6 @@ import {Schema, model} from "mongoose";
 import { UserDocument } from "../types/user.interface";
 import validator from 'validator';
 import bcryptjs from 'bcryptjs'
-import {User} from '../types/user.interface'
 
 const userSchema = new Schema<UserDocument>({
    email: {
