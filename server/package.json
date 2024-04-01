@@ -17,6 +17,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "mongoose": "^8.2.4",
     "socket.io": "^4.7.5"
