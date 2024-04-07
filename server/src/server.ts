@@ -15,7 +15,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res) => {
     res.send("API is up");
 })
+
 app.post('/api/users', usersControllers.register)
+
+app.post('/api/users/login', usersControllers.login)
 
 //socket io 
 io.on('connection', ()=>{
