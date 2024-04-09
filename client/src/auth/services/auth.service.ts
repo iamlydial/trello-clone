@@ -10,6 +10,9 @@ export class AuthService {
   currentUser$ = new BehaviorSubject<CurrentUserInterface | null | undefined>(
     undefined
   );
+
+  apiUrl = environment.apiUrl;
+
   constructor(private http: HttpClient) {}
 
   getCurrentUser(): Observable<CurrentUserInterface> {
@@ -20,8 +23,10 @@ export class AuthService {
   register(
     registerRequest: RegisterRequestInterface
   ): Observable<CurrentUserInterface> {
-    const url = (environment.apiUrl = '/users');
-    return this.http.post<CurrentUserInterface>(url, registerRequest);
+    return this.http.post<CurrentUserInterface>(
+      this.apiUrl + '/users',
+      registerRequest
+    );
   }
 
   setToken(currentUser: CurrentUserInterface): void {
