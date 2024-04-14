@@ -3,9 +3,10 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import mongoose, { Mongoose, mongo } from "mongoose";
 import * as usersControllers from "./controllers/users";
+import * as boardControllers from "./controllers/boards";
 import bodyParser from "body-parser";
 import authMiddleware from "./middlewares/auth";
-import cors from 'cors'
+import cors from "cors";
 
 const app = express();
 const httpServer = createServer(app);
@@ -14,6 +15,14 @@ const io = new Server(httpServer);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+mongoose.set("toJSON", {
+  virtuals: true,
+  transform: (_, converted) => {
+    delete converted._id;
+  },
+});
+
 //express
 app.get("/", (req, res) => {
   res.send("API is up");
@@ -22,6 +31,7 @@ app.get("/", (req, res) => {
 app.post("/api/users", usersControllers.register);
 app.post("/api/users/login", usersControllers.login);
 app.get("/api/user", authMiddleware, usersControllers.currentUser);
+app.get("/api/boards", authMiddleware, boardControllers.getBoards);
 
 //socket io
 io.on("connection", () => {
