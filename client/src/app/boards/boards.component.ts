@@ -15,4 +15,7 @@ export class BoardsComponent implements OnInit {
       this.boards = boards;
     });
   }
+  createBoard(title: string): void {
+    console.log('title', title);
+  }
 }
