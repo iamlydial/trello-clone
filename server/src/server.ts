@@ -33,6 +33,7 @@ app.post("/api/users/login", usersControllers.login);
 app.get("/api/user", authMiddleware, usersControllers.currentUser);
 app.get("/api/boards", authMiddleware, boardControllers.getBoards);
 app.post("/api/boards", authMiddleware, boardControllers.createBoard);
+app.get("/api/boards/:boardId", authMiddleware, boardControllers.getBoard);
 
 //socket io
 io.on("connection", () => {

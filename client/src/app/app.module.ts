@@ -4,10 +4,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { HomeModule } from './home/home.module';
 import { AuthInterceptor } from './auth/services/authinterceptors.service';
 import { BoardsModule } from './boards/boards.module';
+import { BoardModule } from './board/board.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +22,8 @@ import { BoardsModule } from './boards/boards.module';
     AuthModule,
     HttpClientModule,
     HomeModule,
-    BoardsModule
+    BoardsModule,
+    BoardModule,
   ],
   providers: [
     {

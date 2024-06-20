@@ -33,8 +33,26 @@ export const createBoard = async (
       title: req.body.title,
       userId: req.user.id,
     });
+
     const savedBoard = await newBoard.save();
     res.send(savedBoard);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getBoard = async (
+  req: ExpressRequestInterface,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+    const board = await BoardModel.findById(req.params.boardId);
+
+    res.send(board);
   } catch (err) {
     next(err);
   }
