@@ -14,9 +14,10 @@ export class AuthService {
   );
 
   isLogged$ = this.currentUser$.pipe(
-    filter((currentUser) => currentUser !== undefined), 
-    map((currentUser)=> Boolean(currentUser)))
-  
+    filter((currentUser) => currentUser !== undefined),
+    map((currentUser) => Boolean(currentUser))
+  );
+
   apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -46,5 +47,10 @@ export class AuthService {
 
   setCurrentuser(currentUser: CurrentUserInterface | null): void {
     this.currentUser$.next(currentUser);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.currentUser$.next(null);
   }
 }
