@@ -1,4 +1,4 @@
-APP TOP BAR
+<app-topbar></app-topbar>
 <div class="boards-page-container">
   <div class="home-left-sidebar-container">
     <a
@@ -22,7 +22,11 @@ APP TOP BAR
         <div class="boards-page-header-name">My Boards</div>
       </div>
       <div class="board-tile-list">
-        <inline-form class="create-board-form" defaultText="Create new board" (handleSubmit)="createBoard($event)"></inline-form>
+        <inline-form
+          class="create-board-form"
+          defaultText="Create new board"
+          (handleSubmit)="createBoard($event)"
+        ></inline-form>
         <a
           [routerLink]="['/boards', board.id]"
           *ngFor="let board of boards"
