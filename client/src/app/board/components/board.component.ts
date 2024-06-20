@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardsService } from '../../shared/services/boards.service';
 import { ActivatedRoute } from '@angular/router';
+import { BoardModule } from '../board.module';
+import { BoardService } from '../services/board.service';
+import { Observable, filter } from 'rxjs';
+import { BoardInterface } from '../../shared/types/board.interface';
 
 @Component({
   selector: 'board',
@@ -8,10 +12,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class BoardComponent implements OnInit {
   boardId: string;
+  board$: Observable<BoardInterface>;
 
   constructor(
-    private boardService: BoardsService,
-    private route: ActivatedRoute
+    private boardsService: BoardsService,
+    private route: ActivatedRoute,
+    private boardService: BoardService
   ) {
     const boardId = this.route.snapshot.paramMap.get('boardId');
 
@@ -20,6 +26,7 @@ export class BoardComponent implements OnInit {
     }
 
     this.boardId = boardId;
+    this.board$ = this.boardService.board$.pipe(filter(Boolean));
   }
 
   ngOnInit(): void {
@@ -27,8 +34,8 @@ export class BoardComponent implements OnInit {
   }
 
   fetchData(): void {
-    this.boardService.getBoard(this.boardId).subscribe((board) => {
-      console.log('board', board);
+    this.boardsService.getBoard(this.boardId).subscribe((board) => {
+      this.boardService.setBoard(board);
     });
   }
 }
