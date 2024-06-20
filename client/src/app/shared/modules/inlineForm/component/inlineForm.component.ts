@@ -13,9 +13,10 @@ export class InlineFormComponent {
   @Input() inputPlaceholder: string = '';
   @Input() inputType: string = 'input';
 
-  @Output() handleSubmt = new EventEmitter<string>();
+  @Output() handleSubmit = new EventEmitter<string>();
 
   isEditing: boolean = false;
+  
   form = this.fb.group({
     title: [''],
   });
@@ -31,7 +32,7 @@ export class InlineFormComponent {
 
   onSubmit(): void {
     if (this.form.value.title) {
-      this.handleSubmt.emit(this.form.value.title);
+      this.handleSubmit.emit(this.form.value.title);
     }
     this.isEditing = false;
     this.form.reset();
