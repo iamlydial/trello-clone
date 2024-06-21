@@ -5,6 +5,8 @@ import { Socket } from "./types/socket.interface";
 import mongoose, { Mongoose, mongo } from "mongoose";
 import * as usersControllers from "./controllers/users";
 import * as boardControllers from "./controllers/boards";
+import * as columnsControllers from "./controllers/columns";
+
 import bodyParser from "body-parser";
 import authMiddleware from "./middlewares/auth";
 import cors from "cors";
@@ -43,6 +45,11 @@ app.get("/api/user", authMiddleware, usersControllers.currentUser);
 app.get("/api/boards", authMiddleware, boardControllers.getBoards);
 app.post("/api/boards", authMiddleware, boardControllers.createBoard);
 app.get("/api/boards/:boardId", authMiddleware, boardControllers.getBoard);
+app.get(
+  "/api/boards/:boardId/columns",
+  authMiddleware,
+  columnsControllers.getColumns
+);
 
 //socket io
 io.use(async (socket: Socket, next) => {
