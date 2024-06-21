@@ -13,6 +13,7 @@ import { HomeModule } from './home/home.module';
 import { AuthInterceptor } from './auth/services/authinterceptors.service';
 import { BoardsModule } from './boards/boards.module';
 import { BoardModule } from './board/board.module';
+import { SocketService } from './shared/services/socket.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { BoardModule } from './board/board.module';
       useClass: AuthInterceptor,
       multi: true,
     },
+    SocketService,
   ],
   bootstrap: [AppComponent],
 })

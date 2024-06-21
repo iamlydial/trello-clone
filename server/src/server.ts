@@ -10,7 +10,11 @@ import cors from "cors";
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+  },
+});
 
 app.use(cors());
 app.use(bodyParser.json());
