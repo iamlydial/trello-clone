@@ -7,6 +7,7 @@ import * as boardControllers from "./controllers/boards";
 import bodyParser from "body-parser";
 import authMiddleware from "./middlewares/auth";
 import cors from "cors";
+import { SocketEventEnum } from "./types/socketEvents.enum";
 
 const app = express();
 const httpServer = createServer(app);
@@ -40,9 +41,16 @@ app.post("/api/boards", authMiddleware, boardControllers.createBoard);
 app.get("/api/boards/:boardId", authMiddleware, boardControllers.getBoard);
 
 //socket io
-io.on("connection", () => {
-  console.log("connect");
+io.on("connection", (socket) => {
+  socket.on(SocketEventEnum.boardsJoin, (data) => {
+    boardControllers.joinBoard(io, socket, data);
+  });
+  socket.on(SocketEventEnum.boardsLeave, (data) => {
+    boardControllers.leaveBoard(io, socket, data);
+  });
 });
+
+
 
 //mongoose
 mongoose.connect("mongodb://localhost:27017/trello-clone").then(() => {
