@@ -1,13 +1,17 @@
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { Socket } from "./types/socket.interface";
 import mongoose, { Mongoose, mongo } from "mongoose";
 import * as usersControllers from "./controllers/users";
 import * as boardControllers from "./controllers/boards";
 import bodyParser from "body-parser";
 import authMiddleware from "./middlewares/auth";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 import { SocketEventEnum } from "./types/socketEvents.enum";
+import { secret } from "./config";
+import User from "./models/user";
 
 const app = express();
 const httpServer = createServer(app);
@@ -41,7 +45,24 @@ app.post("/api/boards", authMiddleware, boardControllers.createBoard);
 app.get("/api/boards/:boardId", authMiddleware, boardControllers.getBoard);
 
 //socket io
-io.on("connection", (socket) => {
+io.use(async (socket: Socket, next) => {
+  try {
+    const token = (socket.handshake.auth.token as string) ?? "";
+    const data = jwt.verify(token.split(" ")[1], secret) as {
+      id: string;
+      email: string;
+    };
+    const user = await User.findById(data.id);
+
+    if (!user) {
+      return next(new Error("Authentication Error"));
+    }
+    socket.user = user;
+    next();
+  } catch (err) {
+    next(new Error("Authentication Error"));
+  }
+}).on("connection", (socket) => {
   socket.on(SocketEventEnum.boardsJoin, (data) => {
     boardControllers.joinBoard(io, socket, data);
   });
@@ -49,8 +70,6 @@ io.on("connection", (socket) => {
     boardControllers.leaveBoard(io, socket, data);
   });
 });
-
-
 
 //mongoose
 mongoose.connect("mongodb://localhost:27017/trello-clone").then(() => {
