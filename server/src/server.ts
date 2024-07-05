@@ -76,6 +76,9 @@ io.use(async (socket: Socket, next) => {
   socket.on(SocketEventEnum.boardsLeave, (data) => {
     boardControllers.leaveBoard(io, socket, data);
   });
+  socket.on(SocketEventEnum.columnsCreate, data =>{
+    columnsControllers.createColumn(io, socket, data)
+  })
 });
 
 //mongoose

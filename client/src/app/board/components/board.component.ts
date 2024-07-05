@@ -55,4 +55,8 @@ export class BoardComponent implements OnInit {
       this.boardService.setBoard(board);
     });
   }
+
+  test(): void {
+    this.socketService.emit('columns:create', { boardId: this.boardId, title: 'foo' });
+  }
 }
