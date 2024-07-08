@@ -88,6 +88,9 @@ io.use(async (socket: Socket, next) => {
   socket.on(SocketEventEnum.tasksCreate, (data) => {
     tasksControllers.createTask(io, socket, data);
   });
+  socket.on(SocketEventEnum.boardsUpdate, (data) => {
+    boardControllers.updateBoard(io, socket, data);
+  });
 });
 
 //mongoose
