@@ -37,4 +37,9 @@ export class BoardService {
     const updatedColumns = [...this.columns$.getValue(), column];
     this.columns$.next(updatedColumns);
   }
+
+  addTask(task: TaskInterface): void {
+    const updatedTask = [...this.tasks$.getValue(), task];
+    this.tasks$.next(updatedTask);
+  }
 }
