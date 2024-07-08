@@ -4,6 +4,7 @@ import { BoardComponent } from './components/board.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from '../auth/services/authGuard.service';
 import { BoardService } from './services/board.service';
+import { TopbarModule } from '../shared/modules/topbar/topbar.module';
 
 const routes: Routes = [
   {
@@ -14,8 +15,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, RouterModule.forChild(routes), TopbarModule],
   declarations: [BoardComponent],
-  providers: [BoardService]
+  providers: [BoardService],
 })
 export class BoardModule {}
