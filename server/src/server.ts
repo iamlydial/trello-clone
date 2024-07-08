@@ -97,6 +97,9 @@ io.use(async (socket: Socket, next) => {
   socket.on(SocketEventEnum.columnsDelete, (data) => {
     columnsControllers.deleteColumn(io, socket, data);
   });
+  socket.on(SocketEventEnum.columnsUpdate, (data) => {
+    columnsControllers.updateColumn(io, socket, data);
+  });
 });
 
 //mongoose
