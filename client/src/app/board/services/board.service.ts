@@ -4,11 +4,13 @@ import { BoardInterface } from '../../shared/types/board.interface';
 import { SocketService } from '../../shared/services/socket.service';
 import { SocketEventEnum } from '../../shared/types/socketEvents.enum';
 import { ColumnInterface } from '../../shared/types/columns.interface';
+import { TaskInterface } from '../../shared/types/tasks.interface';
 
 @Injectable()
 export class BoardService {
   board$ = new BehaviorSubject<BoardInterface | null>(null);
   columns$ = new BehaviorSubject<ColumnInterface[]>([]);
+  tasks$ = new BehaviorSubject<TaskInterface[]>([]);
 
   constructor(private socketService: SocketService) {}
 
@@ -25,6 +27,10 @@ export class BoardService {
 
   setColumns(columns: ColumnInterface[]): void {
     this.columns$.next(columns);
+  }
+
+  setTasks(tasks: TaskInterface[]): void {
+    this.tasks$.next(tasks);
   }
 
   addColumn(column: ColumnInterface): void {
