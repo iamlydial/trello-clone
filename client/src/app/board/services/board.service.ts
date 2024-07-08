@@ -26,4 +26,9 @@ export class BoardService {
   setColumns(columns: ColumnInterface[]): void {
     this.columns$.next(columns);
   }
+
+  addColumn(column: ColumnInterface): void {
+    const updatedColumns = [...this.columns$.getValue(), column];
+    this.columns$.next(updatedColumns);
+  }
 }

@@ -9,6 +9,7 @@ import { SocketService } from '../../shared/services/socket.service';
 import { SocketEventEnum } from '../../shared/types/socketEvents.enum';
 import { ColumnsService } from '../../shared/services/columns.service';
 import { ColumnInterface } from '../../shared/types/columns.interface';
+import { ColumnInputInterface } from '../../shared/types/columnInput.interface';
 
 @Component({
   selector: 'board',
@@ -62,6 +63,13 @@ export class BoardComponent implements OnInit {
         this.boardService.leaveBoard(this.boardId);
       }
     });
+
+    this.socketService
+      .listen<ColumnInterface>(SocketEventEnum.columnsCreateSuccess)
+      .subscribe((column) => {
+        console.log('column', column);
+        this.boardService.addColumn(column);
+      });
   }
 
   fetchData(): void {
@@ -71,5 +79,15 @@ export class BoardComponent implements OnInit {
     this.columnsService.getColumns(this.boardId).subscribe((columns) => {
       this.boardService.setColumns(columns);
     });
+  }
+
+  createColumn(title: string) {
+    console.log('create column: ', title);
+    const columnInput: ColumnInputInterface = {
+      title,
+      boardId: this.boardId,
+    };
+
+    this.columnsService.createColumn(columnInput);
   }
 }
