@@ -91,6 +91,9 @@ io.use(async (socket: Socket, next) => {
   socket.on(SocketEventEnum.boardsUpdate, (data) => {
     boardControllers.updateBoard(io, socket, data);
   });
+  socket.on(SocketEventEnum.boardsDelete, (data) => {
+    boardControllers.deleteBoard(io, socket, data);
+  });
 });
 
 //mongoose
