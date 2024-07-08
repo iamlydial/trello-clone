@@ -6,6 +6,7 @@ import mongoose, { Mongoose, mongo } from "mongoose";
 import * as usersControllers from "./controllers/users";
 import * as boardControllers from "./controllers/boards";
 import * as columnsControllers from "./controllers/columns";
+import * as tasksControllers from "./controllers/tasks";
 
 import bodyParser from "body-parser";
 import authMiddleware from "./middlewares/auth";
@@ -50,6 +51,11 @@ app.get(
   authMiddleware,
   columnsControllers.getColumns
 );
+app.get(
+  "/api/boards/:boardId/tasks",
+  authMiddleware,
+  tasksControllers.getTasks
+);
 
 //socket io
 io.use(async (socket: Socket, next) => {
@@ -76,9 +82,12 @@ io.use(async (socket: Socket, next) => {
   socket.on(SocketEventEnum.boardsLeave, (data) => {
     boardControllers.leaveBoard(io, socket, data);
   });
-  socket.on(SocketEventEnum.columnsCreate, data =>{
-    columnsControllers.createColumn(io, socket, data)
-  })
+  socket.on(SocketEventEnum.columnsCreate, (data) => {
+    columnsControllers.createColumn(io, socket, data);
+  });
+  socket.on(SocketEventEnum.tasksCreate, (data) => {
+    tasksControllers.createTask(io, socket, data);
+  });
 });
 
 //mongoose
