@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BoardsService } from '../../shared/services/boards.service';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { BoardModule } from '../board.module';
 import { BoardService } from '../services/board.service';
-import { Observable, combineLatest, filter, map } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  combineLatest,
+  filter,
+  map,
+  takeUntil,
+} from 'rxjs';
 import { BoardInterface } from '../../shared/types/board.interface';
 import { SocketService } from '../../shared/services/socket.service';
 import { SocketEventEnum } from '../../shared/types/socketEvents.enum';
@@ -18,13 +25,15 @@ import { TaskInputInterface } from '../../shared/types/taskInput.interface';
   selector: 'board',
   templateUrl: './board.component.html',
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   boardId: string;
   data$: Observable<{
     board: BoardInterface;
     columns: ColumnInterface[];
     tasks: TaskInterface[];
   }>;
+
+  unsubscribe$ = new Subject<void>();
 
   constructor(
     private boardsService: BoardsService,
@@ -63,6 +72,11 @@ export class BoardComponent implements OnInit {
     this.initializeListeners();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   initializeListeners(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
@@ -80,6 +94,7 @@ export class BoardComponent implements OnInit {
 
     this.socketService
       .listen<TaskInterface>(SocketEventEnum.tasksCreateSuccess)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((task) => {
         console.log('task', task);
         this.boardService.addTask(task);
@@ -87,6 +102,7 @@ export class BoardComponent implements OnInit {
 
     this.socketService
       .listen<BoardInterface>(SocketEventEnum.boardsUpdateSuccess)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((updatedBoard) => {
         console.log('board', updatedBoard);
         this.boardService.updateBoard(updatedBoard);
@@ -94,18 +110,21 @@ export class BoardComponent implements OnInit {
 
     this.socketService
       .listen<ColumnInterface>(SocketEventEnum.columnsUpdateSuccess)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((updatedColumn) => {
         this.boardService.updateColumn(updatedColumn);
       });
 
     this.socketService
       .listen<void>(SocketEventEnum.boardsDeleteSuccess)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
         this.router.navigateByUrl('/boards');
       });
 
     this.socketService
       .listen<string>(SocketEventEnum.columnsDeleteSuccess)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((columnId) => {
         this.boardService.deleteColumn(columnId);
       });
