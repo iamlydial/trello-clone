@@ -74,7 +74,7 @@ export const deleteColumn = async (
       data.columnId
     );
   } catch (err) {
-    socket.emit(SocketEventEnum.boardsDeleteFailure, getErrorMessage(err));
+    socket.emit(SocketEventEnum.columnsDeleteFailure, getErrorMessage(err));
   }
 };
 

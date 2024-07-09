@@ -100,6 +100,12 @@ io.use(async (socket: Socket, next) => {
   socket.on(SocketEventEnum.columnsUpdate, (data) => {
     columnsControllers.updateColumn(io, socket, data);
   });
+  socket.on(SocketEventEnum.tasksUpdate, (data) => {
+    tasksControllers.updateTask(io, socket, data);
+  });
+  socket.on(SocketEventEnum.tasksDelete, (data) => {
+    tasksControllers.deleteTask(io, socket, data);
+  });
 });
 
 //mongoose

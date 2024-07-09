@@ -19,4 +19,20 @@ export class TasksService {
   createTask(taskInput: TaskInputInterface): void {
     this.socketService.emit(SocketEventEnum.tasksCreate, taskInput);
   }
+
+  updateTask(
+    boardId: string,
+    taskId: string,
+    fields: { title?: string; description?: string; columnId?: string }
+  ): void {
+    this.socketService.emit(SocketEventEnum.tasksUpdate, {
+      boardId,
+      taskId,
+      fields,
+    });
+  }
+
+  deleteTask(boardId: string, taskId: string): void {
+    this.socketService.emit(SocketEventEnum.tasksDelete, { boardId, taskId });
+  }
 }
