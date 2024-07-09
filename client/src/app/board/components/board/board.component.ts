@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BoardsService } from '../../shared/services/boards.service';
+import { BoardsService } from '../../../shared/services/boards.service';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { BoardModule } from '../board.module';
-import { BoardService } from '../services/board.service';
+import { BoardModule } from '../../board.module';
+import { BoardService } from '../../services/board.service';
 import {
   Observable,
   Subject,
@@ -11,15 +11,15 @@ import {
   map,
   takeUntil,
 } from 'rxjs';
-import { BoardInterface } from '../../shared/types/board.interface';
-import { SocketService } from '../../shared/services/socket.service';
-import { SocketEventEnum } from '../../shared/types/socketEvents.enum';
-import { ColumnsService } from '../../shared/services/columns.service';
-import { ColumnInterface } from '../../shared/types/columns.interface';
-import { ColumnInputInterface } from '../../shared/types/columnInput.interface';
-import { TaskInterface } from '../../shared/types/tasks.interface';
-import { TasksService } from '../../shared/services/tasks.service';
-import { TaskInputInterface } from '../../shared/types/taskInput.interface';
+import { BoardInterface } from '../../../shared/types/board.interface';
+import { SocketService } from '../../../shared/services/socket.service';
+import { SocketEventEnum } from '../../../shared/types/socketEvents.enum';
+import { ColumnsService } from '../../../shared/services/columns.service';
+import { ColumnInterface } from '../../../shared/types/columns.interface';
+import { ColumnInputInterface } from '../../../shared/types/columnInput.interface';
+import { TaskInterface } from '../../../shared/types/tasks.interface';
+import { TasksService } from '../../../shared/services/tasks.service';
+import { TaskInputInterface } from '../../../shared/types/taskInput.interface';
 
 @Component({
   selector: 'board',
@@ -79,7 +79,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   initializeListeners(): void {
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
+      if (event instanceof NavigationStart && !event.url.includes('/boards/')) {
         console.log('leaving a page');
         this.boardService.leaveBoard(this.boardId);
       }
@@ -87,6 +87,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.socketService
       .listen<ColumnInterface>(SocketEventEnum.columnsCreateSuccess)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((column) => {
         console.log('column', column);
         this.boardService.addColumn(column);
@@ -187,5 +188,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.columnsService.updateColumn(this.boardId, columnId, {
       title: columnName,
     });
+  }
+
+  openTask(taskId: string): void {
+    this.router.navigate(['boards', this.boardId, 'tasks', taskId]);
   }
 }
